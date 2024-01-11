@@ -1,11 +1,11 @@
 # TODO: Два метода в классе, [X]
-# TODO: один принимает в себя либо строку, либо число.  []
+# TODO: один принимает в себя либо строку, либо число.  [X]
 #
 # TODO: Если я передаю строку, то смотрим:
 # TODO: если произведение гласных и согласных букв меньше или
-#  равно длине слова, выводить все гласные, иначе согласные;  [ ]
+#  равно длине слова, выводить все гласные, иначе согласные;  [X]
 # TODO: если число то, произведение суммы чётных цифр на длину
-#  числа.  [ ]
+#  числа.  [X]
 # TODO: Длину строки и числа искать во втором методе.  [X]
 
 class NewClass:
@@ -19,14 +19,12 @@ class NewClass:
             result = sum([int(i) for i in param if i in '24680']) * len_param
             print(f'Переданный параметр является числом. Результат вычислений равен: {result}')
         else:
-            count_glas, count_sogl = 0, 0
-            for i in param:
-                if i in 'аеёиоуыэюя':
-                    count_glas += 1
-                else:
-                    count_sogl += 1
-            result = 0
-            print(f'Переданный параметр является строкой. Результат вычислений равен: {result}')
+            glas = sum([1 for i in param if i in 'аеёиоуыэюя'])
+            if glas * (len_param - glas) <= len(param):
+                result = [i for i in param if i in 'аеёиоуыэюя']
+            else:
+                result = [i for i in param if i not in 'аеёиоуыэюя']
+            print(f'Переданный параметр является строкой. Вот результат обработки строки: {result}')
 
     def calc_len(self, param):
         return len(str(param))
@@ -34,6 +32,7 @@ class NewClass:
 
 def main():
     task5 = NewClass()
+    task5.result(input('Введите строку для обработки: '))
 
 
 if __name__ == "__main__":
