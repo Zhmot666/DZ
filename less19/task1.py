@@ -14,13 +14,16 @@ class Car:
         self.type = ''
         self.year = ''
 
+    def __del__(self):
+        print('Автомобиль заглушен')
+
     @staticmethod
     def start_car():
         print('Автомобиль заведен')
 
-    @staticmethod
-    def stop_car():
-        print('Автомобиль заглушен')
+    # @staticmethod
+    # def stop_car():
+    #     print('Автомобиль заглушен')
 
     def year_car(self, input_year):
         self.year = input_year
@@ -45,7 +48,8 @@ def main():
     print('Заводим!!!')
     new_car.start_car()
     print('Глушим')
-    new_car.stop_car()
+    # new_car.stop_car()
+    # del new_car
     print('Всё работает, можно брать! :)')
 
 
