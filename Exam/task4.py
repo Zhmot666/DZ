@@ -12,32 +12,33 @@ class ProductBasket:
         self.products = {}
 
     def __add__(self, other):
-        result = ProductBasket()
-        for product_name, quantity in self.products.items():
-            result.add_product(product_name, quantity)
-        for product_name, quantity in other.products.items():
-            result.add_product(product_name, quantity)
-        return result
-
-    def __sub__(self, other):
-        result = ProductBasket()
         product_name, quantity = next(iter(other.items()))
-        for product_name, quantity in self.products.items():
-            result.add_product(product_name, quantity)
-        return result
-
-    def add_product(self, product_name, quantity):
-        if product_name in self.products:
+        if product_name in self.products.keys():
             self.products[product_name] += quantity
         else:
-            self.products[product_name] = quantity
+            self.add_product(product_name, quantity)
 
-    def remove_product(self, product_name, quantity):
-        if product_name in self.products:
-            if self.products[product_name] > quantity:
-                self.products[product_name] -= quantity
+    def __sub__(self, other):
+        product_name, quantity = next(iter(other.items()))
+        if product_name in self.products.keys():
+            if self.products[product_name] < quantity:
+                print('Требуемого продукта меньше чем надо')
+                return False
+            elif self.products[product_name] == quantity:
+                self.remove_product(product_name)
+                return True
             else:
-                del self.products[product_name]
+                self.products[product_name] -= quantity
+                return True
+        else:
+            print('Такого продукта нет в наличии')
+            return False
+
+    def add_product(self, product_name, quantity):
+        self.products.update({product_name: quantity})
+
+    def remove_product(self, product_name):
+        del self.products[product_name]
 
     def get_total_price(self):
         total_price = 0
@@ -47,6 +48,7 @@ class ProductBasket:
 
     def get_product_price(self, product_name):
         return 0
+
 
 class Store(ProductBasket):
     def __init__(self):
@@ -80,13 +82,6 @@ class CustomerBasket(ProductBasket):
     def get_product_price(self, product_name):
         return Store().get_product_price(product_name)
 
-    def get_discounted_price(self):
-        total_price = self.get_total_price()
-        if total_price > 100:
-            return total_price * 0.9
-        else:
-            return total_price
-
 
 if __name__ == '__main__':
     store = Store()
@@ -100,8 +95,8 @@ if __name__ == '__main__':
     for product_name, quantity in basket.products.items():
         print(f'{product_name}: {quantity}')
 
-    store - {'яблоко': 3}
-    basket + {'яблоко': 3}
+    if store - {'яблоко': 4}:
+        basket + {'яблоко': 4}
 
     print('Содержимое магазина после перемещения:')
     for product_name, quantity in store.products.items():
@@ -112,4 +107,3 @@ if __name__ == '__main__':
         print(f'{product_name}: {quantity}')
 
     print(f'Общая стоимость продуктов в корзине покупателя: {basket.get_total_price()} руб.')
-    print(f'Цена со скидкой: {basket.get_discounted_price()} руб.')
