@@ -4,17 +4,19 @@
 # TODO: Есть список, состоящий из чисел и слов. [X]
 # TODO: Если элемент списка слово: записать его в соответствующую таблицу, [X]
 # TODO: затем посчитать длину слова и записать её в числовую таблицу. [X]
-# TODO: Если элемент списка число: проверить, если число чётное записать его в таблицу чисел, [ ]
-# TODO: если нечётное, то записать во вторую таблицу слово: «нечётное» [ ]
-# TODO: Если число записей во второй таблице больше 5, то удалить 1 запись в первой таблице. [ ]
+# TODO: Если элемент списка число: проверить, если число чётное записать его в таблицу чисел, [X]
+# TODO: если нечётное, то записать во вторую таблицу слово: «нечётное» [X]
+# TODO: Если число записей во второй таблице больше 5, то удалить 1 запись в первой таблице. [X]
 # TODO: Если меньше, то обновить 1 запись в первой таблице на «hello» [ ]
 
 import sqlite3
 import random
 
 
-def create_field(cursor, table_name, column_name, value):
-    cursor.execute(f'INSERT INTO {table_name} ({column_name}) VALUES ({value})')
+def create_field(conn, table_name, column_name, value):
+    sql = f"INSERT INTO {table_name} ({column_name}) VALUES (?)"
+    conn.execute(sql, (value,))
+    conn.commit()
 
 
 # Генератор случайного списка слов и чисел
@@ -32,9 +34,9 @@ def list_generation(long_list):
             r_l.append(random.choice(words_list))
     return r_l
 
+
 def main():
-    # random_list = list_generation(int(input('Введите длину генерируемого списка: ')))
-    random_list = [2]
+    random_list = list_generation(int(input('Введите длину генерируемого списка: ')))
     print(random_list)
     connection = sqlite3.connect('DB_DZ.db')
     cursor = connection.cursor()
@@ -54,15 +56,20 @@ def main():
     ''')
     for i in random_list:
         if isinstance(i, str):
-            create_field(cursor, 'text_table', 'text_fields', i)
-            create_field(cursor, 'number_table', 'number_fields', len(i))
+            create_field(connection, 'text_table', 'text_fields', i)
+            create_field(connection, 'number_table', 'number_fields', len(i))
         else:
-            if i%2 == 0:
-                create_field(cursor, 'number_table', 'number_fields', i)
+            if i % 2 == 0:
+                create_field(connection, 'number_table', 'number_fields', i)
             else:
-                create_field(cursor, 'text_table', 'text_fields', 'нечётное')
+                create_field(connection, 'text_table', 'text_fields', 'нечётное')
 
-
+    result = (connection.execute(f"SELECT COUNT(*) FROM number_table")).fetchone()
+    cursor = connection.cursor()
+    if result[0] > 5:
+        cursor.execute('DELETE FROM text_table WHERE id=1')
+    else:
+        cursor.execute('''UPDATE text_table SET text_fields = 'hello' WHERE id = 1''')
     connection.commit()
     connection.close()
 
