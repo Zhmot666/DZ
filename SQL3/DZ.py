@@ -62,6 +62,7 @@ def main():
             else:
                 create_field(cursor, 'text_table', 'text_fields', 'нечётное')
 
+
     connection.commit()
     connection.close()
 
