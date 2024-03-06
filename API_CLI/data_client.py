@@ -79,3 +79,6 @@ class Postgresql(DB):
     def delete(self, id_user):
         with self.__CONNECTION.cursor() as self.sql:
             self.sql.execute('''DELETE FROM person WHERE id_user = %s''', (id_user,))
+
+    def commit(self):
+        self.__CONNECTION.commit()

@@ -39,6 +39,7 @@ def main():
             case '4':
                 db.delete(input('Введите ваш id: '))
             case '5':
+                db.commit()
                 break
             case _:
                 print('Такого пункта меню нет')
