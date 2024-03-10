@@ -26,7 +26,8 @@ class NewClass:
                 result = [i for i in param if i not in 'аеёиоуыэюя']
             print(f'Переданный параметр является строкой. Вот результат обработки строки: {result}')
 
-    def calc_len(self, param):
+    @staticmethod
+    def calc_len(param):
         return len(str(param))
 
 
