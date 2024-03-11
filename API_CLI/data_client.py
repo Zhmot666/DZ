@@ -55,7 +55,7 @@ class DB(ABC):
 
 
 class Sqlite(DB):
-    __CONNECTION = sqlite3.connect('db_sqlite.db')
+    __CONNECTION = sqlite3.connect('contact_list.db')
 
     __CREATE_SCRIPTS1 = '''CREATE TABLE IF NOT EXISTS Person(PersonID INTEGER PRIMARY KEY AUTOINCREMENT,
                                             LastName VARCHAR(50) NOT NULL,
@@ -78,8 +78,9 @@ class Sqlite(DB):
             self.sql.execute(self.__CREATE_SCRIPTS1)
             self.sql.execute(self.__CREATE_SCRIPTS2)
             self.sql.execute(self.__CREATE_SCRIPTS3)
-            self.sql.execute(self.__CREATE_SCRIPTS4)
-            self.sql.execute(self.__CREATE_SCRIPTS5)
+            if self.sql.execute('''SELECT * FROM ContactTypes''',).fetchall().__len__() == 0:
+                self.sql.execute(self.__CREATE_SCRIPTS4)
+                self.sql.execute(self.__CREATE_SCRIPTS5)
 
     def select_persons(self):
         with self.__CONNECTION as self.sql:
@@ -156,8 +157,22 @@ class Sqlite(DB):
 
 
 class Postgresql(DB):
-    __CONNECTION = psycopg2.connect(host='localhost', port='5432', database='cli_crud', user='postgres',
-                                    password='Asd80164420301dsA')
+    # print('Заполните данные для подключения к PostgreSQL серверу. Для ввода данных по умолчанию просто нажмите Enter.')
+    # host_name = input('Введите адрес сервера (по умолчанию: localhost):  ')
+    # host_name = 'localhost' if host_name == '' else host_name
+    # port_number = input('Введите порт сервера (по умолчанию: 5432):  ')
+    # port_number = 5432 if port_number == '' else int(port_number)
+    # base_name = input('Введите имя БД (по умолчанию: contact_list):  ')
+    # base_name = 'contact_list' if base_name == '' else base_name
+    # user_name = input('Введите имя пользователя (по умолчанию: postgres):  ')
+    # user_name = 'postgres' if user_name == '' else user_name
+    # base_password = input('Введите пароль:  ')
+    # __CONNECTION = psycopg2.connect(host=host_name, port=port_number, database=base_name, user=user_name,
+    #                                 password=base_password)
+
+
+    __CONNECTION = psycopg2.connect(host='localhost', port='5432', database='contact_list', user='postgres',
+                                    password='тут_должен_быть_пароль')
     __CONNECTION.autocommit = True
     __CREATE_SCRIPTS1 = '''CREATE TABLE IF NOT EXISTS Person(PersonID SERIAL PRIMARY KEY,
                                              LastName VARCHAR(50) NOT NULL,
@@ -177,12 +192,15 @@ class Postgresql(DB):
     __CREATE_SCRIPTS5 = '''INSERT INTO ContactTypes (TypeName, Description) VALUES ('phone', 'Телефон')'''
 
     def __init__(self):
-        with self.__CONNECTION as self.sql:
-            self.sql.cursor().execute(self.__CREATE_SCRIPTS1)
-            self.sql.cursor().execute(self.__CREATE_SCRIPTS2)
-            self.sql.cursor().execute(self.__CREATE_SCRIPTS3)
-            self.sql.cursor().execute(self.__CREATE_SCRIPTS4)
-            self.sql.cursor().execute(self.__CREATE_SCRIPTS5)
+        with self.__CONNECTION.cursor() as self.sql:
+            self.sql.execute(self.__CREATE_SCRIPTS1)
+            self.sql.execute(self.__CREATE_SCRIPTS2)
+            self.sql.execute(self.__CREATE_SCRIPTS3)
+            self.sql.execute("SELECT COUNT(*) FROM ContactTypes")
+            record_count = self.sql.fetchone()[0]
+            if record_count == 0:
+                self.sql.execute(self.__CREATE_SCRIPTS4)
+                self.sql.execute(self.__CREATE_SCRIPTS5)
 
     def select_persons(self):
         with self.__CONNECTION.cursor() as self.sql:
@@ -252,8 +270,10 @@ class Postgresql(DB):
 
     def delete_contact_type(self, id_contact_info_type):
         with self.__CONNECTION.cursor() as self.sql:
-            if self.sql.execute('''SELECT * FROM ContactInfo WHERE ContactType = %s''',
-                                (id_contact_info_type,)).fetchall().__len__() == 0:
+            self.sql.execute('''SELECT * FROM ContactInfo WHERE ContactType = %s''',
+                                             (id_contact_info_type,))
+            select_result = self.sql.fetchall().__len__()
+            if select_result == 0:
                 self.sql.execute('''DELETE FROM ContactTypes WHERE TypeID = %s''', (id_contact_info_type,))
             else:
                 print('Удаление данных невозможно, так как данные связаны с другими таблицами')

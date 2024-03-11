@@ -6,9 +6,6 @@ from data_client import Sqlite
 from data_client import Postgresql
 
 
-db = ''
-
-
 def clear_cmd():
     if os.name == 'nt':
         os.system('cls')
@@ -16,8 +13,7 @@ def clear_cmd():
         os.system('clear')
 
 
-def sub_menu_select():
-    global db
+def sub_menu_select(db):
     while True:
         clear_cmd()
         print('Выберите действие')
@@ -42,8 +38,7 @@ def sub_menu_select():
                 sys.exit(0)
 
 
-def sub_menu_insert():
-    global db
+def sub_menu_insert(db):
     while True:
         clear_cmd()
         print('Выберите действие')
@@ -78,8 +73,7 @@ def sub_menu_insert():
                 sys.exit(0)
 
 
-def sub_menu_update():
-    global db
+def sub_menu_update(db):
     while True:
         clear_cmd()
         print('Выберите действие')
@@ -120,8 +114,7 @@ def sub_menu_update():
                 sys.exit(0)
 
 
-def sub_menu_delete():
-    global db
+def sub_menu_delete(db):
     while True:
         clear_cmd()
         print('Выберите действие')
@@ -156,8 +149,7 @@ def sub_menu_delete():
                 sys.exit(0)
 
 
-def sub_menu():
-    global db
+def sub_menu(db):
     while True:
         clear_cmd()
         print('Выберите действие')
@@ -169,19 +161,18 @@ def sub_menu():
         selection = int(input('Введите номер пункта меню: '))
         match selection:
             case 1:
-                sub_menu_select()
+                sub_menu_select(db)
             case 2:
-                sub_menu_insert()
+                sub_menu_insert(db)
             case 3:
-                sub_menu_update()
+                sub_menu_update(db)
             case 4:
-                sub_menu_delete()
+                sub_menu_delete(db)
             case 5:
                 sys.exit(0)
 
 
 def main():
-    global db
     clear_cmd()
     print('='*33)
     print('Добро пожаловать в адресную книгу')
@@ -202,6 +193,7 @@ def main():
                     sleep(0.02)
                 break
             case 2:
+                clear_cmd()
                 db = Postgresql()
                 for _ in tqdm.tqdm(range(100)):
                     sleep(0.02)
@@ -211,7 +203,7 @@ def main():
             case _:
                 print('Такого пункта меню не существует, попробуйте еще раз...')
                 sleep(1)
-    sub_menu()
+    sub_menu(db)
 
 
 if __name__ == '__main__':
