@@ -157,7 +157,8 @@ class Sqlite(DB):
 
 
 class Postgresql(DB):
-    # print('Заполните данные для подключения к PostgreSQL серверу. Для ввода данных по умолчанию просто нажмите Enter.')
+    # print('Заполните данные для подключения к Postgres серверу. Для ввода данных по
+    # умолчанию просто нажмите Enter.')
     # host_name = input('Введите адрес сервера (по умолчанию: localhost):  ')
     # host_name = 'localhost' if host_name == '' else host_name
     # port_number = input('Введите порт сервера (по умолчанию: 5432):  ')
@@ -169,7 +170,6 @@ class Postgresql(DB):
     # base_password = input('Введите пароль:  ')
     # __CONNECTION = psycopg2.connect(host=host_name, port=port_number, database=base_name, user=user_name,
     #                                 password=base_password)
-
 
     __CONNECTION = psycopg2.connect(host='localhost', port='5432', database='contact_list', user='postgres',
                                     password='тут_должен_быть_пароль')
@@ -270,8 +270,7 @@ class Postgresql(DB):
 
     def delete_contact_type(self, id_contact_info_type):
         with self.__CONNECTION.cursor() as self.sql:
-            self.sql.execute('''SELECT * FROM ContactInfo WHERE ContactType = %s''',
-                                             (id_contact_info_type,))
+            self.sql.execute('''SELECT * FROM ContactInfo WHERE ContactType = %s''', (id_contact_info_type,))
             select_result = self.sql.fetchall().__len__()
             if select_result == 0:
                 self.sql.execute('''DELETE FROM ContactTypes WHERE TypeID = %s''', (id_contact_info_type,))
