@@ -1,0 +1,1 @@
+INSERT INTO series (id_series, name_series, link_series) VALUES (?, ?, ?)

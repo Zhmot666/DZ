@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "sv-parser"
+version = "0.1.0"
+description = "Парсер заглавной страницы сайта seasonvar.ru с возможностью просмотра информации о сериалах и запуска на воспроизведение."
+authors = ["Zhmot666 <mailboxforspam@tut.by>"]
+license = "GPL"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+requests = "^2.31.0"
+bs4 = "^0.0.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

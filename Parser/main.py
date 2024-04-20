@@ -1,12 +1,12 @@
-import requests
-
-
-def sv_save():
-    url = 'http://seasonvar.ru'
+import sys
+from ui import QtWidgets, MyApp
 
 
 def main():
-    sv_save()
+    app = QtWidgets.QApplication(sys.argv)
+    windows = MyApp()
+    windows.show()
+    sys.exit(app.exec_())
 
 
 if __name__ == '__main__':

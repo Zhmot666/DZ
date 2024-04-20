@@ -1,0 +1,1 @@
+SELECT image_series, info_series, player_series FROM series WHERE id_series = ?

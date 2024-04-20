@@ -1,0 +1,1 @@
+UPDATE series SET info_series = ?, image_series = ?, player_series = ? WHERE id_series = ?
