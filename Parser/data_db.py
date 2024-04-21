@@ -32,8 +32,8 @@ class Sqlite:
     def check_series_info(self, id_series):
         with self.__CONNECTION as self.sql:
             result = self.sql.execute(self.__CHECK_SERIES_INFO, (id_series,))
-            result.fetchone()
-            if result.description[0][1] is None or result.description[1][1] is None or result.description[2][1] is None:
+            check_result = result.fetchone()
+            if check_result[0] is None or check_result[1] is None or check_result[2] is None:
                 return False
             else:
                 return True

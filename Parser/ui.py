@@ -42,10 +42,10 @@ class MyApp(QtWidgets.QMainWindow):
         if not self.db.check_series_info(series_id):
             series_info = self.parser.parse_series(series_id)
             response = requests.get(series_info['img'])
-            image_series = response.content  # TODO: преобразовать в BLOB
+            image_series = response.content
             self.db.update_series(series_id, series_info['description'], S3b(image_series), series_info['link'])
         get_information = self.db.get_series_info(series_id)
-        self.DescriptionSeries.setText(get_information[1])  # TODO: и блядь обратно из BLOBa
+        self.DescriptionSeries.setText(get_information[1])
         with open('temp.jpg', "wb") as output_file:
             output_file.write(get_information[0])
         pixmap = QPixmap('temp.jpg')
