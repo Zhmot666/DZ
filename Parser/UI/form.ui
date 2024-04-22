@@ -110,14 +110,17 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>150</number>
+   </attribute>
    <column>
     <property name="text">
-     <string>ID сериала</string>
+     <string>ID</string>
     </property>
    </column>
    <column>
     <property name="text">
-     <string>Наименование</string>
+     <string>Наименование сериала</string>
     </property>
    </column>
   </widget>

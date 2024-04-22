@@ -25,6 +25,19 @@ class MyApp(QtWidgets.QMainWindow):
             self.db.insert_series(series['id'], series['title'], series['link'])
 
         self.TableSeries.clear()
+        self.TableSeries.setColumnCount(2)
+        # self.TableSeries.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        self.TableSeries.horizontalHeader().setStretchLastSection(True)
+        self.TableSeries.setHorizontalHeaderLabels(['ID', 'Название сериала'])
+        self.TableSeries.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.TableSeries.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.TableSeries.setAlternatingRowColors(True)
+        self.TableSeries.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.TableSeries.setShowGrid(True)
+        self.TableSeries.setSortingEnabled(False)
+        self.TableSeries.setColumnHidden(0, True)
+        self.TableSeries.setColumnHidden(1, False)
+
         self.TableSeries.setRowCount(0)
         series_list_db = self.db.get_series_list()
         for series in series_list_db:

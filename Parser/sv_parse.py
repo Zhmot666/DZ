@@ -50,3 +50,6 @@ class SVparse:
         link = soup.find('link', attrs={'itemprop': 'embedUrl'})
         return_dict['link'] = link['href']
         return return_dict
+
+    def parse_head(self, id_series):
+        pass
